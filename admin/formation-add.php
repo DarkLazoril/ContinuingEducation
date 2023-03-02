@@ -1,0 +1,34 @@
+<?php 
+include_once('DB_connect.php');
+
+if(isset($_POST['env']))
+{    
+	
+
+	// insertion dans la table formation
+	$req=$bdd->prepare('INSERT INTO formation(DATE_DEBUT,DATE_FIN,SPECIALITE,RESPONSABLE,PRE_REQUIS,LIEN_WEB,TYPE) VALUES(?,?,?,?,?,?,?)');
+	$req->execute(array($_POST['datedebut'],
+		                $_POST['datefin'],
+		                $_POST['specialite'],
+		                $_POST['responsable'],
+		                $_POST['prerequis'],
+		                $_POST['lien'],
+		                $_POST['type']));
+	$req->closeCursor();
+	$req=$bdd->prepare('UPDATE authentification set profil=? where cin=?');
+	$req->execute(array('r',$_POST['responsable']));
+	$req->closeCursor();
+
+	if($_POST['type']=='dca')
+	{
+	header('location: liste-DCA.php ');
+               exit;
+     }
+     else{
+     header('location: liste-DCESS.php ');
+         exit;
+     }
+	
+
+}
+  
